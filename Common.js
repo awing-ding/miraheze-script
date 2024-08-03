@@ -33,7 +33,7 @@
 
 	function darkifyBandeau( content ) {
 		var data = content.find( '.darkmode-data' );
-		var bandeau = content.find( '.bandeau-generique' );
+		var bandeau = data.next();
 		var darkColor = data.data( 'darkmode-color' );
 		if ( darkColor !== 'null' ) {
 			var whiteColor = bandeau.css( 'color' );
@@ -59,7 +59,7 @@
 
 	function clarifyBandeau( content ) {
 		var data = content.find( '.whitemode-data' );
-		var bandeau = content.find( '.bandeau-generique' );
+		var bandeau = data.next();
 		var whiteColor = data.data( 'whitemode-color' );
 		if ( whiteColor !== 'null' ) {
 			var darkColor = bandeau.css( 'color' );
