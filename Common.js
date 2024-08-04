@@ -3,8 +3,6 @@
 	 Tout JavaScript présent ici sera exécuté par tous les utilisateurs à chaque chargement de page.
 	*/
 	var hooks = [];
-	var darkMode = [];
-	var lightMode = [];
 	/* ///////////////////////////////////////////////////// */
 	/* Ajustement de la largeur des bandeaux d'information */
 	/* ///////////////////////////////////////////////////// */
@@ -31,68 +29,39 @@
 	/*             Gère la couleur des bandeaux            */
 	/* ///////////////////////////////////////////////////// */
 
-	function darkifyBandeau( content ) {
-		var data = content.find( '.darkmode-data' );
-		var bandeau = data.next();
-		var darkColor = data.data( 'darkmode-color' );
-		if ( darkColor !== 'null' ) {
-			var whiteColor = bandeau.css( 'color' );
-			bandeau.css( 'color', darkColor );
-			data.data( 'whitemode-color', whiteColor );
+	function colorBandeau( content, mode ) {
+		var classSelec;
+		var dataName;
+		if ( mode === 'dark' ) {
+			classSelec = '.darkmode-data';
+			dataName = 'darkmode';
+		} else {
+			classSelec = '.whitemode-data';
+			dataName = 'whitemode';
 		}
-		var darkBgColor = data.data( 'darkmode-bg-color' );
-		if ( darkBgColor !== 'null' ) {
-			var whiteBgColor = bandeau.css( 'background-color' );
-			bandeau.css( 'background-color', darkBgColor );
-			data.data( 'whitemode-bg-color', whiteBgColor );
-		}
-		var darkBorderColor = data.data( 'darkmode-border-color' );
-		if ( darkBorderColor !== 'null' ) {
-			var whiteBorderColor = bandeau.css( 'border-color' );
-			bandeau.css( 'border-color', darkBorderColor );
-			data.data( 'whitemode-border-color', whiteBorderColor );
-		}
-		data.attr( 'class', '.whitemode-data' );
+		content.find( classSelec ).each( function () {
+			var $bandeau = $( this ).siblings( '.bandeau-generique' ).first();
+			var newColor = $( this ).data( dataName + '-color' );
+			if ( newColor !== 'null' ) {
+				$bandeau.css( 'color', newColor );
+			}
+			var newBgColor = $( this ).data( dataName + '-bg-color' );
+			if ( newBgColor !== 'null' ) {
+				$bandeau.css( 'background-color', newBgColor );
+			}
+			var newBorderColor = $( this ).data( dataName + '-border-color' );
+			if ( newBorderColor !== 'null' ) {
+				$bandeau.css( 'border-color', newBorderColor );
+			}
+		} );
 	}
-
-	darkMode.push( darkifyBandeau );
-
-	function clarifyBandeau( content ) {
-		var data = content.find( '.whitemode-data' );
-		var bandeau = data.next();
-		var whiteColor = data.data( 'whitemode-color' );
-		if ( whiteColor !== 'null' ) {
-			var darkColor = bandeau.css( 'color' );
-			bandeau.css( 'color', whiteColor );
-			data.data( 'darkmode-color', darkColor );
-		}
-		var whiteBgColor = data.data( 'whitemode-bg-color' );
-		if ( whiteBgColor !== 'null' ) {
-			var darkBgColor = bandeau.css( 'background-color' );
-			bandeau.css( 'background-color', whiteBgColor );
-			data.data( 'darkmode-bg-color', darkBgColor );
-		}
-		var whiteBorderColor = data.data( 'whitemode-border-color' );
-		if ( whiteBorderColor !== 'null' ) {
-			var darkBorderColor = bandeau.css( 'border-color' );
-			bandeau.css( 'border-color', whiteBorderColor );
-			data.data( 'darkmode-border-color', darkBorderColor );
-		}
-		data.attr( 'class', '.darkmode-data' );
-	}
-
-	lightMode.push( clarifyBandeau );
 
 	function actOnBackground( content ) {
 		var checkIsDarkSchemePreferred = window.matchMedia && window.matchMedia( '(prefers-color-scheme:dark)' ).matches;
 		if ( checkIsDarkSchemePreferred ) {
-			darkMode.forEach( function ( hook ) {
-				hook( content );
-			} );
+			colorBandeau( content, 'dark' );
 		} else {
-			lightMode.forEach( function ( hook ) {
-				hook( content );
-			} );
+			colorBandeau( content, 'light' );
 		}
 	}
 
