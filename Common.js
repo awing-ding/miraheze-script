@@ -88,4 +88,21 @@
 			hook( pageContent );
 		} );
 	} );
+
+	/* ///////////////////////////////////////////////////// */
+	/*                      Listener                         */
+	/* ///////////////////////////////////////////////////// */
+	// listen if html class change (dark/light mode switch)
+	var observer = new MutationObserver( function ( mutations ) {
+		mutations.forEach( function ( mutation ) {
+			if ( mutation.attributeName === 'class' ) {
+				// eslint-disable-next-line no-jquery/no-global-selector
+		        actOnBackground( $( '.mw-parser-output' ) );
+			}
+		} );
+	} );
+	observer.observe( document.querySelector( 'html' ), {
+		attributes: true
+	} );
+
 }() );
