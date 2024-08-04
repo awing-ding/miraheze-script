@@ -58,7 +58,11 @@
 
 	function actOnBackground( content ) {
 		var checkIsDarkSchemePreferred = window.matchMedia && window.matchMedia( '(prefers-color-scheme:dark)' ).matches;
-		if ( checkIsDarkSchemePreferred ) {
+		// eslint-disable-next-line no-jquery/no-global-selector
+		var citizenSkinTheme = $( 'html' ).attr( 'class' ).split( ' ' ).filter( function ( c ) {
+			return c === 'skin-citizen-dark' || c === 'skin-citizen-light' || c === 'skin-citizen-auto';
+		} )[ 0 ];
+		if ( ( checkIsDarkSchemePreferred && citizenSkinTheme === 'skin-citizen-auto' ) || citizenSkinTheme === 'skin-citizen-dark' ) {
 			colorBandeau( content, 'dark' );
 		} else {
 			colorBandeau( content, 'light' );
